@@ -1,5 +1,5 @@
 ARG APP_PATH=/opt/outline
-FROM outlinewiki/outline-base AS base
+FROM jmal/outline-base AS base
 
 ARG APP_PATH
 WORKDIR $APP_PATH
@@ -7,7 +7,7 @@ WORKDIR $APP_PATH
 # ---
 FROM node:20-slim AS runner
 
-LABEL org.opencontainers.image.source="https://github.com/outline/outline"
+LABEL org.opencontainers.image.source="https://github.com/jamebal/outline"
 
 ARG APP_PATH
 WORKDIR $APP_PATH
