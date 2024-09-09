@@ -154,12 +154,11 @@ workflows:
           requires:
             - build
             - types
-
   build-docker:
     jobs:
       - build-image:
           filters:
             tags:
-              only: /^v.*/
+              only: jmal
             branches:
               ignore: /.*/
