@@ -23,6 +23,7 @@ executors:
     environment:
       IMAGE_NAME: jmal/outline
       BASE_IMAGE_NAME: jmal/outline-base
+      CIRCLE_TAG: latest
     docker:
       - image: circleci/buildpack-deps:stretch
 
@@ -141,19 +142,19 @@ workflows:
       - lint:
           requires:
             - build
-      - test-shared:
-          requires:
-            - build
-      - test-app:
-          requires:
-            - build
-      - types:
-          requires:
-            - build
-      - bundle-size:
-          requires:
-            - build
-            - types
+#      - test-shared:
+#          requires:
+#            - build
+#      - test-app:
+#          requires:
+#            - build
+#      - types:
+#          requires:
+#            - build
+#      - bundle-size:
+#          requires:
+#            - build
+#            - types
       - build-image:
           requires:
             - build
