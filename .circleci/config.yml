@@ -22,7 +22,7 @@ executors:
   docker-publisher:
     environment:
       IMAGE_NAME: jmal/outline
-      BASE_IMAGE_NAME: outlinewiki/outline-base
+      BASE_IMAGE_NAME: jmal/outline-base
     docker:
       - image: circleci/buildpack-deps:stretch
 
