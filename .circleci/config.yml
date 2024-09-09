@@ -142,27 +142,9 @@ workflows:
       - lint:
           requires:
             - build
-#      - test-shared:
-#          requires:
-#            - build
-#      - test-app:
-#          requires:
-#            - build
-#      - types:
-#          requires:
-#            - build
-#      - bundle-size:
-#          requires:
-#            - build
-#            - types
       - build-image:
           requires:
             - build
-  build-docker:
-    jobs:
-      - build-image:
           filters:
-            tags:
-              only: jmal
             branches:
-              ignore: /.*/
+              only: jmal
