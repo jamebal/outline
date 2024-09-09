@@ -5,7 +5,7 @@ defaults: &defaults
   docker:
     - image: cimg/node:20.10
     - image: cimg/redis:5.0
-    - image: cimg/postgres:14.2
+    - image: groonga/pgroonga:latest-debian-15
       environment:
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: password
@@ -20,7 +20,7 @@ defaults: &defaults
 executors:
   docker-publisher:
     environment:
-      IMAGE_NAME: outlinewiki/outline
+      IMAGE_NAME: jmal/outline
       BASE_IMAGE_NAME: outlinewiki/outline-base
     docker:
       - image: circleci/buildpack-deps:stretch
