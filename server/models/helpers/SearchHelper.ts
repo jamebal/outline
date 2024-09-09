@@ -480,15 +480,14 @@ export default class SearchHelper {
           ],
         });
       }
-
       if (limitedQuery || iLikeQueries.length === 0) {
-        where[Op.and].push(
-          Sequelize.fn(
-            `"searchVector" @@ to_tsquery`,
-            "english",
-            Sequelize.literal(":query")
-          )
-        );
+        // Perform full-text search using the &@~ operator of PGroonga
+        where[Op.and].push({
+          [Op.or]: [
+            Sequelize.literal(`text &@~ '${query}'`),
+            Sequelize.literal(`title &@~ '${query}'`),
+          ],
+        });
       }
     }
 

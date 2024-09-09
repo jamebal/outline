@@ -6,7 +6,7 @@ services:
       - "127.0.0.1:6379:6379"
     user: "redis:redis"
   postgres:
-    image: postgres
+    image: groonga/pgroonga:latest-debian-15
     ports:
       - "127.0.0.1:5432:5432"
     environment:
