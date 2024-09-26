@@ -3,7 +3,7 @@ import { getCookie, removeCookie, setCookie } from "tiny-cookie";
 import usePersistedState from "~/hooks/usePersistedState";
 import Logger from "~/utils/Logger";
 import history from "~/utils/history";
-import { isValidPostLoginRedirect } from "~/utils/urls";
+import { isAllowedLoginRedirect } from "~/utils/urls";
 
 /**
  * Hook to set locally and return the document or collection that the user last visited. This is
@@ -20,7 +20,9 @@ export function useLastVisitedPath(): [string, (path: string) => void] {
 
   const setPathAsLastVisitedPath = React.useCallback(
     (path: string) => {
-      path !== lastVisitedPath && setLastVisitedPath(path);
+      if (isAllowedLoginRedirect(path) && path !== lastVisitedPath) {
+        setLastVisitedPath(path);
+      }
     },
     [lastVisitedPath, setLastVisitedPath]
   );
@@ -36,9 +38,14 @@ export function useLastVisitedPath(): [string, (path: string) => void] {
 export function setPostLoginPath(path: string) {
   const key = "postLoginRedirectPath";
 
-  if (isValidPostLoginRedirect(path)) {
+  if (isAllowedLoginRedirect(path)) {
     setCookie(key, path, { expires: 1 });
-    sessionStorage.setItem(key, path);
+
+    try {
+      sessionStorage.setItem(key, path);
+    } catch (e) {
+      // If the session storage is full or inaccessible, we can't do anything about it.
+    }
   }
 }
 
@@ -52,7 +59,12 @@ export function usePostLoginPath() {
   const key = "postLoginRedirectPath";
 
   const getter = React.useCallback(() => {
-    const path = sessionStorage.getItem(key) || getCookie(key);
+    let path;
+    try {
+      path = sessionStorage.getItem(key) || getCookie(key);
+    } catch (e) {
+      // If the session storage is inaccessible, we can't do anything about it.
+    }
 
     if (path) {
       Logger.info("lifecycle", "Spending post login path", { path });
@@ -64,7 +76,7 @@ export function usePostLoginPath() {
         cleanup?.();
       });
 
-      if (isValidPostLoginRedirect(path)) {
+      if (isAllowedLoginRedirect(path)) {
         return path;
       }
     }
